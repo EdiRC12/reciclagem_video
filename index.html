@@ -3,64 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Player em Loop</title>
+    <title>Video Player Responsivo</title>
     <style>
-        /* Remove margens e barras de rolagem da página */
+        /* Reseta margens e define o fundo */
         body, html {
             margin: 0;
             padding: 0;
-            overflow: hidden;
-            height: 100%;
             width: 100%;
-            background-color: black; /* Fundo preto para o caso de o vídeo demorar a carregar */
+            height: 100%;
+            background-color: black;
+            overflow: hidden;
+            
+            /* Flexbox para centralizar o vídeo perfeitamente na tela */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        /* Estilo para o player de vídeo */
+        /* Estilo responsivo para o player de vídeo */
         #videoPlayer {
-            /* Posiciona o vídeo para cobrir toda a tela */
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            min-width: 100%;
-            min-height: 100%;
-            width: auto;
-            height: auto;
-            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            max-width: 100vw;
+            max-height: 100vh;
             
-            /* Garante que o vídeo cubra a área sem distorcer, cortando o excesso se necessário */
-            object-fit: cover; 
+            /* CONTAIN: Garante que o vídeo inteiro apareça sem ser cortado */
+            object-fit: contain; 
         }
     </style>
 </head>
 <body>
 
-    <!-- O elemento de vídeo -->
-    <video id="videoPlayer" autoplay muted playsinline></video>
+    <!-- 
+      controls: Mostra os botões de play, volume, tela cheia.
+      playsinline: Impede que o iPhone force o vídeo a abrir em tela cheia nativa do iOS.
+      Nota: Removemos o 'muted' para ter som, e o 'autoplay' porque navegadores bloqueiam autoplay com som.
+    -->
+    <video id="videoPlayer" controls playsinline></video>
 
     <script>
-        // Lista (array) com as URLs dos seus vídeos
+        // Lista com as URLs dos vídeos
         const videoPlaylist = [
             "https://edirc12.github.io/reciclagem_video/V%C3%8DDEO%20REDUZIDO.mp4"
+            // Você pode adicionar mais vídeos aqui separando por vírgula:
+            // "https://link-do-video-2.mp4",
+            // "https://link-do-video-3.mp4"
         ];
 
         const videoPlayer = document.getElementById('videoPlayer');
         let currentVideoIndex = 0;
 
-        // Define a fonte inicial
+        // Carrega o primeiro vídeo da lista
         videoPlayer.src = videoPlaylist[currentVideoIndex];
 
-        // Evento disparado quando o vídeo termina
+        // Evento que dispara quando o vídeo atual termina
         videoPlayer.addEventListener('ended', function() {
             // Avança para o próximo vídeo
             currentVideoIndex++;
 
-            // Se chegar ao fim da lista, volta para o primeiro
+            // Se chegar ao fim da lista, volta para o primeiro (Loop)
             if (currentVideoIndex >= videoPlaylist.length) {
                 currentVideoIndex = 0;
             }
 
-            // Atualiza a fonte e toca
+            // Atualiza a fonte do vídeo
             videoPlayer.src = videoPlaylist[currentVideoIndex];
+            
+            // Toca o próximo vídeo automaticamente (como o usuário já interagiu antes, o som vai funcionar)
             videoPlayer.play();
         });
     </script>
