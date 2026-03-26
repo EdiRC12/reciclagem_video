@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player em Loop</title>
+    <style>
+        /* Remove margens e barras de rolagem da página */
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+            width: 100%;
+            background-color: black; /* Fundo preto para o caso de o vídeo demorar a carregar */
+        }
+
+        /* Estilo para o player de vídeo */
+        #videoPlayer {
+            /* Posiciona o vídeo para cobrir toda a tela */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            
+            /* Garante que o vídeo cubra a área sem distorcer, cortando o excesso se necessário */
+            object-fit: cover; 
+        }
+    </style>
+</head>
+<body>
+
+    <!-- O elemento de vídeo -->
+    <video id="videoPlayer" autoplay muted playsinline></video>
+
+    <script>
+        // Lista (array) com as URLs dos seus vídeos
+        const videoPlaylist = [
+            "https://edirc12.github.io/reciclagem_video/V%C3%8DDEO%20REDUZIDO.mp4"
+        ];
+
+        const videoPlayer = document.getElementById('videoPlayer');
+        let currentVideoIndex = 0;
+
+        // Define a fonte inicial
+        videoPlayer.src = videoPlaylist[currentVideoIndex];
+
+        // Evento disparado quando o vídeo termina
+        videoPlayer.addEventListener('ended', function() {
+            // Avança para o próximo vídeo
+            currentVideoIndex++;
+
+            // Se chegar ao fim da lista, volta para o primeiro
+            if (currentVideoIndex >= videoPlaylist.length) {
+                currentVideoIndex = 0;
+            }
+
+            // Atualiza a fonte e toca
+            videoPlayer.src = videoPlaylist[currentVideoIndex];
+            videoPlayer.play();
+        });
+    </script>
+
+</body>
+</html>
